@@ -1,0 +1,18 @@
+{
+  "tests": [
+    {
+      "name": "Missing required fields",
+      "method": "POST",
+      "path": "/",
+      "body": "{}",
+      "expectedStatus": 400
+    },
+    {
+      "name": "Successful registration",
+      "method": "POST",
+      "path": "/",
+      "body": "{\"first_name\": \"Иван\", \"last_name\": \"Петров\", \"age\": 25, \"city\": \"Москва\", \"country\": \"Россия\"}",
+      "expectedStatus": 201
+    }
+  ]
+}
