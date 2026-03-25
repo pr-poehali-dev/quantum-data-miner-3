@@ -35,6 +35,11 @@ export default function Hero() {
         <button className="mt-8 bg-white text-black px-8 py-3 text-sm uppercase tracking-wide font-medium hover:bg-neutral-200 transition-colors duration-300 cursor-pointer">
           Найти приключение
         </button>
+        <div className="mt-4">
+          <a href="#" className="text-white text-sm underline underline-offset-4 hover:text-neutral-300 transition-colors duration-300 uppercase tracking-wide">
+            Создать идею напрямки
+          </a>
+        </div>
       </div>
     </div>
   );
