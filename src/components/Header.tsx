@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 interface HeaderProps {
   className?: string;
 }
@@ -26,6 +28,12 @@ export default function Header({ className }: HeaderProps) {
           >
             Присоединиться
           </a>
+          <Link
+            to="/register"
+            className="text-white hover:text-neutral-400 transition-colors duration-300 uppercase text-sm"
+          >
+            Регистрация
+          </Link>
         </nav>
       </div>
     </header>
