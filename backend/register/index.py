@@ -1,9 +1,14 @@
 import json
 import os
 import base64
+import hashlib
 import boto3
 import psycopg2
 from datetime import datetime
+
+
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode()).hexdigest()
 
 
 def handler(event: dict, context) -> dict:
@@ -33,10 +38,12 @@ def handler(event: dict, context) -> dict:
     age = body.get('age')
     city = body.get('city', '').strip()
     country = body.get('country', '').strip()
+    email = body.get('email', '').strip().lower()
+    password = body.get('password', '').strip()
     hobbies = body.get('hobbies', '').strip() or None
     photo_base64 = body.get('photo_base64')
 
-    if not all([first_name, last_name, age, city, country]):
+    if not all([first_name, last_name, age, city, country, email, password]):
         return {
             'statusCode': 400,
             'headers': {'Access-Control-Allow-Origin': '*'},
@@ -67,10 +74,21 @@ def handler(event: dict, context) -> dict:
     schema = os.environ.get('MAIN_DB_SCHEMA', 'public')
     conn = psycopg2.connect(os.environ['DATABASE_URL'])
     cur = conn.cursor()
+
+    cur.execute(f"SELECT id FROM {schema}.users WHERE email = %s", (email,))
+    if cur.fetchone():
+        cur.close()
+        conn.close()
+        return {
+            'statusCode': 409,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': 'Пользователь с таким email уже существует'})
+        }
+
     cur.execute(
-        f"""INSERT INTO {schema}.users (first_name, last_name, age, city, country, hobbies, photo_url)
-            VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id""",
-        (first_name, last_name, int(age), city, country, hobbies, photo_url)
+        f"""INSERT INTO {schema}.users (first_name, last_name, age, city, country, hobbies, photo_url, email, password_hash)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+        (first_name, last_name, int(age), city, country, hobbies, photo_url, email, hash_password(password))
     )
     user_id = cur.fetchone()[0]
     conn.commit()

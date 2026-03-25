@@ -11,7 +11,7 @@
       "name": "Successful registration",
       "method": "POST",
       "path": "/",
-      "body": "{\"first_name\": \"Иван\", \"last_name\": \"Петров\", \"age\": 25, \"city\": \"Москва\", \"country\": \"Россия\"}",
+      "body": "{\"first_name\": \"Иван\", \"last_name\": \"Петров\", \"age\": 25, \"city\": \"Москва\", \"country\": \"Россия\", \"email\": \"test_wander@example.com\", \"password\": \"testpass123\"}",
       "expectedStatus": 201
     }
   ]

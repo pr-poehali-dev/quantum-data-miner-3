@@ -1,0 +1,18 @@
+{
+  "tests": [
+    {
+      "name": "Missing fields",
+      "method": "POST",
+      "path": "/",
+      "body": "{}",
+      "expectedStatus": 400
+    },
+    {
+      "name": "Wrong credentials",
+      "method": "POST",
+      "path": "/",
+      "body": "{\"email\": \"wrong@test.com\", \"password\": \"wrongpass\"}",
+      "expectedStatus": 401
+    }
+  ]
+}

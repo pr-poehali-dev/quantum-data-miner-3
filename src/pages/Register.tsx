@@ -15,6 +15,8 @@ export default function Register() {
     city: "",
     country: "",
     hobbies: "",
+    email: "",
+    password: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -46,14 +48,15 @@ export default function Register() {
     });
 
     const data = await res.json();
+    const parsed = typeof data === "string" ? JSON.parse(data) : data;
     setLoading(false);
 
     if (!res.ok) {
-      setError(typeof data === "string" ? JSON.parse(data).error : data.error);
+      setError(parsed.error);
       return;
     }
 
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -177,6 +180,33 @@ export default function Register() {
               />
             </div>
 
+            <div className="flex flex-col gap-2">
+              <label className="text-xs uppercase tracking-wide text-neutral-400">Email *</label>
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="ivan@example.com"
+                value={form.email}
+                onChange={handleChange}
+                className="bg-transparent border border-neutral-700 px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-white transition-colors"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-xs uppercase tracking-wide text-neutral-400">Пароль *</label>
+              <input
+                type="password"
+                name="password"
+                required
+                minLength={6}
+                placeholder="Минимум 6 символов"
+                value={form.password}
+                onChange={handleChange}
+                className="bg-transparent border border-neutral-700 px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-white transition-colors"
+              />
+            </div>
+
             {error && <p className="text-red-400 text-sm">{error}</p>}
 
             <button
@@ -186,6 +216,13 @@ export default function Register() {
             >
               {loading ? "Сохраняем..." : "Зарегистрироваться"}
             </button>
+
+            <p className="text-center text-neutral-500 text-sm">
+              Уже есть аккаунт?{" "}
+              <Link to="/login" className="text-white hover:text-neutral-300 transition-colors underline underline-offset-4">
+                Войти
+              </Link>
+            </p>
           </form>
         </div>
       </main>
